@@ -14,6 +14,9 @@ function App() {
 
 
 
+
+
+
   async function handleAddRepository() {
     const repo = await api.post("repositories", {
       title: 'ccastro01',
@@ -22,11 +25,27 @@ function App() {
     })
 
     setRepositories( [...repositories, repo.data] )
+    console.log(repo.data)
   }
 
+
+
+
   async function handleRemoveRepository(id) {
-    // TODO
+    await api.delete(`repositories/${id}`)
+
+    const findRepositorieIndex = repositories.findIndex(repository =>
+      repository.id === id
+    )
+
+    repositories.splice(findRepositorieIndex, 1)
+    setRepositories( [...repositories] )
+
+
   }
+
+
+
 
   return (
     <div>
@@ -34,7 +53,7 @@ function App() {
         {repositories.map(repository => (
           <li key={repository.id}>
             {repository.title}
-            <button onClick={() => handleRemoveRepository(1)}>
+            <button onClick={() => handleRemoveRepository(repository.id)}>
               Remover
           </button>
           </li>
